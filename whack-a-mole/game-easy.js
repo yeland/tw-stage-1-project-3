@@ -35,6 +35,10 @@ window.onload = function () {
 
         setTimeout(() => {
             // TODO: 写当游戏时间结束后要发生的事
+            titleH1.innerHTML = "TIME UP! ";
+            timeUp = true;
+            startBtn.style.display = '';
+            startBtn.innerHTML = "Replay!"
         }, gameTime)
     }
 
@@ -43,6 +47,10 @@ window.onload = function () {
      */
     function resetScoreAndTime() {
         // TODO: 写游戏的初始化设置
+        titleH1.innerHTML = "WHACK-A-MOLE! ";
+        scoreBoard.innerHTML = "0"; 
+        timeUp = false;  
+        score = 0;
     }
 
     /**
@@ -62,8 +70,8 @@ window.onload = function () {
      * @returns {number}
      */
     function randomTime(min, max) {
-        // TODO: 写生成随机数的逻辑，
-        return 0;
+        // TODO: 写生成随机数的逻辑，           
+        return Math.floor(Math.random() * (max - min + 1) + min);;
     }
 
     /**
@@ -74,7 +82,12 @@ window.onload = function () {
      */
     function randomHole(holes) {
         // TODO: 写地鼠随机选择钻出地洞的逻辑，如果与上一个是相同地洞，则重新选择一个地洞.
-        return null;
+        let random;
+        do {
+            random = Math.floor(Math.random() * 6);
+        } while (random == lastHole)
+        lastHole = random;
+        return holes[random];
     }
 
     /**
@@ -85,6 +98,14 @@ window.onload = function () {
      */
     function comeOutAndStop(hole, time) {
         // TODO: 写地鼠出洞并停留相应时间，如果游戏时间未结束(timeUp)，继续出洞(peep).
+        hole.classList.add("up");
+        setTimeout(() => {
+            hole.classList.remove("up");
+            if(timeUp == false){
+                peep();
+            }
+        }, time)
+        
     }
 
     /**
@@ -92,6 +113,9 @@ window.onload = function () {
      */
     moles.forEach(mole => mole.addEventListener('click', function (e) {
         // TODO: 在这里写用户点击地鼠发生的事.
+        score++;
+        scoreBoard.innerHTML = score;
+        mole.parentNode.classList.remove("up");
     }));
 
 };
